@@ -724,6 +724,18 @@ class AmazonProduct(LXMLWrapper):
             return None, None
 
     @property
+    def best_used_price(self):
+        price = self._safe_get_element_text('OfferSummary.LowestUsedPrice.Amount')
+        currency = self._safe_get_element_text(
+            'OfferSummary.LowestUsedPrice.CurrencyCode')
+        if price:
+            dprice = Decimal(
+                price) / 100 if 'JP' not in self.region else Decimal(price)
+            return dprice, currency
+        else:
+            return None, None
+
+    @property
     def offer_id(self):
         """Offer ID
 
